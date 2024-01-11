@@ -1,2 +1,2 @@
 # BSSA
-Building Software Summative Assignment
+A Python package for Building Software Summative Assignment
