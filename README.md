@@ -1,2 +1,2 @@
 # BSSA
-A Python package for Building Software Summative Assignment
+A Python package for data analysis and information visualisation based on the extracted data from SpaceX API.
