@@ -1,1 +1,8 @@
-user_key: "YOUR_KEY"
+
+# User-specific plot settings (overrides defaults)
+plot:
+  color: green
+  font_name: Comic Sans
+  font_size: 24
+  title: My SpaceX Analysis
+  default_save_path: /path/to/user/save/plots/
