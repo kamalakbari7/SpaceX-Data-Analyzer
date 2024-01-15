@@ -254,63 +254,74 @@ class Analysis():
 
 
 
-    def Extract_year(self, dates):
-        """Extracts years from a series of dates.
-
-        Args:
-            dates (pd.Series): Series of dates in string format (YYYY-MM-DD).
-
-        Returns:
-            list: List of years extracted from the dates.
-        """
-        return [date.split("-")[0] for date in dates]
-
-
-
-
-    def plot_data(self, data_falcon9, save_path: Optional[str] = None) -> plt.Figure:
-        """
-        A function for visualizing the results of analyses. It includes two plots:
+    def plot_data(self, data_falcon9) -> plt.Figure:
+        """ A function for visualizing the results of analyses. It includes two plots:
         1. A bar chart for success rate by orbit type.
         2. A line chart for success rate over years, using the DataFrame processed by compute_analysis.
 
         Args:
             data_falcon9 (pd.DataFrame): The DataFrame containing processed data for Falcon 9.
-            save_path (Optional[str], optional): If provided, the plots will be saved to this path. 
-                                                 If None, the plots will be displayed on the screen. 
-                                                 Defaults to None.
-
         Returns:
             plt.Figure: A matplotlib figure object containing the generated plots.
-
-        # Example usage:
-            analysis = Analysis("path_to_config.yml")
-            analysis.load_data()
-            data_falcon9 = analysis.compute_analysis()
-            fig = analysis.plot_data(data_falcon9)
         """
+        # Load plot configuration from analysis_config.yml
+        plot_config = self.config.get("plot", {})
+        
+        # Define default plot settings
+        default_settings = {
+            "color": "blue",
+            "title": "Title",
+            "x_axis_title": "X Axis",
+            "y_axis_title": "Y Axis",
+            "font_size": 15,
+            "figure_size": {
+                "width": 10,
+                "height": 6
+            },
+            "default_save_path": "/path/to/save/plots/"
+        }
+        
+        # Apply custom plot settings from analysis_config.yml for plot1
+        plot1_settings = plot_config.get("plot1", {})
+        plot1_settings = {**default_settings, **plot1_settings}
+        
         # Plot 1: Success rate by orbit type
         orbit_success_rate = data_falcon9.groupby("Orbit")['Class'].mean().sort_values()
-        ax1 = orbit_success_rate.plot(kind='barh', figsize=(10, 6))
-        plt.ylabel("Orbit Type", fontsize=15)
-        plt.xlabel("Success Rate", fontsize=15)
-        for container in ax1.containers:
-            ax1.bar_label(container)
-        plt.show()  # Or plt.savefig if saving to file
-
+        ax1 = orbit_success_rate.plot(kind='barh', figsize=(plot1_settings["figure_size"]["width"],
+                                                            plot1_settings["figure_size"]["height"]))
+        plt.ylabel(plot1_settings["y_axis_title"])
+        plt.xlabel(plot1_settings["x_axis_title"])
+        plt.title(plot1_settings["title"])
+        plt.bar_label(ax1.containers[0], fontsize=plot1_settings["font_size"])
+        
+        if "save_path" in plot1_settings:
+            save_path = plot1_settings["save_path"]
+        
+        # Display or save the first plot
+        if save_path:
+            plt.savefig(save_path)
+        else:
+            plt.show()
+        
+        # Apply custom plot settings from analysis_config.yml for plot2
+        plot2_settings = plot_config.get("plot2", {})
+        plot2_settings = {**default_settings, **plot2_settings}
+        
         # Plot 2: Success rate over years
         years = [date.split("-")[0] for date in data_falcon9['Date']]
         df_yearly = pd.DataFrame({'year': years, 'Class': data_falcon9['Class']})
         ax2 = sns.lineplot(x=np.unique(years), y=df_yearly.groupby('year')['Class'].mean())
-        plt.xlabel("Year", fontsize=15)
-        plt.ylabel("Success Rate", fontsize=15)
-        plt.show()  # Or plt.savefig if saving to file
-
-        # Return or save the plot as per save_path
+        plt.xlabel(plot2_settings["x_axis_title"])
+        plt.ylabel(plot2_settings["y_axis_title"])
+        plt.title(plot2_settings["title"])
+        
+        if "save_path" in plot2_settings:
+            save_path = plot2_settings["save_path"]
+        
+        # Display or save the second plot
         if save_path:
             plt.savefig(save_path)
         else:
             plt.show()
 
-        # Return the matplotlib figure object (last plotted figure)
         return plt.gcf()
