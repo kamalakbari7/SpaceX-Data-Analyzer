@@ -1,1 +1,41 @@
-figure_title: My analysis
+
+plot1:
+  color: green
+  title: SpaceX success rate by orbit type
+  x_axis_title: Success Rate
+  y_axis_title: Orbit Type
+  font_size: 15
+  figure_size:
+    width: 10
+    height: 6
+  save_path: /path/to/save/plot1/
+
+
+
+plot2:
+  color: blue
+  title: SpaceX success rate over years
+  x_axis_title: Year
+  y_axis_title: Success Rate
+  font_size: 15
+  figure_size:
+    width: 10
+    height: 6
+  default_save_path: /path/to/save/plots/
+
+
+# SpaceX API endpoint for data retrieval
+api_endpoint: https://api.spacexdata.com/v4/launches
+
+data_filtering:
+  payload_mass_min: 1000
+  payload_mass_max: 5000
+  launch_date_start: '2010-01-01'
+  launch_date_end: '2023-12-31'
+
+
+logging:
+  log_level: INFO
+  log_file_path: /path/to/logs/analysis.log
+
+
