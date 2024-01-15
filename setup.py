@@ -1,9 +1,19 @@
-from setuptools import setup
+
+from setuptools import setup, find_packages
 
 setup(
-    name='assignmentpkg',
+    name='BSSApkg',
     version='0.1.0',
-    author='Simeon Wong',
-    packages=['assignmentpkg'],
-    install_requires=['matplotlib', 'pandas']
+    author=['Kamal Akbari', 'Taslimul Hoque'],
+    packages=find_packages(),
+    install_requires=[
+        'pandas',
+        'numpy',
+        'matplotlib',
+        'seaborn',
+        'requests',
+        'pyyaml'
+    ],
+    # Additional metadata about your package
 )
+
