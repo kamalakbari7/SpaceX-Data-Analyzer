@@ -64,7 +64,7 @@ class Analysis():
                     response = requests.get(f"https://api.spacexdata.com/v4/rockets/{x}")
                     if response.status_code == 200:
                         response_data = response.json()
-                        self.BoosterVersion.append(response_data.get('name',None)
+                        self.BoosterVersion.append(response_data.get('name',None))
                     else:
                         print(f"Failed to get data for rocket {x}")
                         self.BoosterVersion.append(None)  # Or handle it in a way that makes sense for your application
@@ -213,20 +213,6 @@ class Analysis():
             'Latitude': self.Latitude
         }
         self.launch_data_df = pd.DataFrame.from_dict(self.launch_data)
-
-
-
- 
-
-    def compute_analysis(self,launch_data_df):
-        
-        data_falcon9 = data1[data1['BoosterVersion']!='Falcon 1']
-        data_falcon9.loc[:,'FlightNumber'] = list(range(1, data_falcon9.shape[0]+1))
-
-        # Calculate the mean value of PayloadMass column
-        mean_PlMass = data_falcon9['PayloadMass'].mean()
-        # Replace the np.nan values with its mean value
-        data_falcon9['PayloadMass'].replace(np.nan,mean_PlMass,inplace=True)
 
     
 
