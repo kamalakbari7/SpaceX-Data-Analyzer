@@ -6,6 +6,7 @@ import requests
 import pandas as pd
 import numpy as np
 import datetime
+import seaborn as sns
 
 # Setting this option will print all collumns of a dataframe
 pd.set_option('display.max_columns', None)
@@ -267,9 +268,63 @@ class Analysis():
 
 
 
+    def Extract_year(self, dates):
+        """Extracts years from a series of dates.
+
+        Args:
+            dates (pd.Series): Series of dates in string format (YYYY-MM-DD).
+
+        Returns:
+            list: List of years extracted from the dates.
+        """
+        return [date.split("-")[0] for date in dates]
 
 
 
 
-    def plot_data(self, save_path:Optional[str] = None) -> plt.Figure:
-        pass
+    def plot_data(self, data_falcon9, save_path: Optional[str] = None) -> plt.Figure:
+        """
+        A function for visualizing the results of analyses. It includes two plots:
+        1. A bar chart for success rate by orbit type.
+        2. A line chart for success rate over years, using the DataFrame processed by compute_analysis.
+
+        Args:
+            data_falcon9 (pd.DataFrame): The DataFrame containing processed data for Falcon 9.
+            save_path (Optional[str], optional): If provided, the plots will be saved to this path. 
+                                                 If None, the plots will be displayed on the screen. 
+                                                 Defaults to None.
+
+        Returns:
+            plt.Figure: A matplotlib figure object containing the generated plots.
+
+        # Example usage:
+            analysis = Analysis("path_to_config.yml")
+            analysis.load_data()
+            data_falcon9 = analysis.compute_analysis()
+            fig = analysis.plot_data(data_falcon9)
+        """
+        # Plot 1: Success rate by orbit type
+        orbit_success_rate = data_falcon9.groupby("Orbit")['Class'].mean().sort_values()
+        ax1 = orbit_success_rate.plot(kind='barh', figsize=(10, 6))
+        plt.ylabel("Orbit Type", fontsize=15)
+        plt.xlabel("Success Rate", fontsize=15)
+        for container in ax1.containers:
+            ax1.bar_label(container)
+        plt.show()  # Or plt.savefig if saving to file
+
+        # Plot 2: Success rate over years
+        years = [date.split("-")[0] for date in data_falcon9['Date']]
+        df_yearly = pd.DataFrame({'year': years, 'Class': data_falcon9['Class']})
+        ax2 = sns.lineplot(x=np.unique(years), y=df_yearly.groupby('year')['Class'].mean())
+        plt.xlabel("Year", fontsize=15)
+        plt.ylabel("Success Rate", fontsize=15)
+        plt.show()  # Or plt.savefig if saving to file
+
+        # Return or save the plot as per save_path
+        if save_path:
+            plt.savefig(save_path)
+        else:
+            plt.show()
+
+        # Return the matplotlib figure object (last plotted figure)
+        return plt.gcf()
