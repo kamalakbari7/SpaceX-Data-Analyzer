@@ -331,8 +331,9 @@ class Analysis():
         if save_path_plot1:
             plt.savefig(os.path.join(save_path_plot1, 'plot1.png'))
         
-        plt.clf()  # Clear the figure for the next plot
-
+        # plt.clf()  # Clear the figure for the next plot
+        plt.figure()
+        
         #Plot 2: Success rate over years
         years = [date.year for date in data_falcon9['Date']]
         df_yearly = pd.DataFrame({'year': years, 'Class': data_falcon9['Class']})
@@ -347,6 +348,6 @@ class Analysis():
         if save_path_plot2:
             plt.savefig(os.path.join(save_path_plot2, 'plot2.png'))
         
-        plt.clf()
+        # plt.clf()
 
         return plt.gcf()
