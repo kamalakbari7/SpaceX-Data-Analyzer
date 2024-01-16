@@ -1,6 +1,19 @@
-pandas
-numpy
-matplotlib
-seaborn
-requests
-pyyaml
+# SpaceX Data Analyzer
+
+## Requirements
+
+The SpaceX Data Analyzer is powered by the following Python packages. To ensure a smooth experience, please install the specified versions.
+
+### Data Manipulation and Analysis
+- [pandas](https://pandas.pydata.org/) (==1.3.3)
+- [numpy](https://numpy.org/) (==1.21.2)
+
+### Visualization
+- [matplotlib](https://matplotlib.org/) (==3.4.3)
+- [seaborn](https://seaborn.pydata.org/) (==0.11.2)
+
+### API Communication
+- [requests](https://docs.python-requests.org/en/latest/) (==2.26.0)
+
+### Configuration
+- [pyyaml](https://pyyaml.org/wiki/PyYAML) (==6.0)
