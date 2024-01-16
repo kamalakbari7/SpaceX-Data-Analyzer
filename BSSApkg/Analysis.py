@@ -327,7 +327,9 @@ class Analysis():
 
         # Save or display the first plot
         # plt.savefig(os.path.join(save_path_plot1, 'plot1.png')) if save_path_plot1 else plt.show()
+        print("Displaying plot 1")
         plt.show()
+
         if save_path_plot1:
             plt.savefig(os.path.join(save_path_plot1, 'plot1.png'))
         
@@ -344,6 +346,7 @@ class Analysis():
         plt.title(plot2_config.get("title", "SpaceX Success Rate Over Years"))
         # Save or display the second plot
         # plt.savefig(os.path.join(save_path_plot2, 'plot2.png')) if save_path_plot2 else plt.show()
+        print("Displaying plot 2")
         plt.show()
         if save_path_plot2:
             plt.savefig(os.path.join(save_path_plot2, 'plot2.png'))
