@@ -221,7 +221,7 @@ class Analysis():
         data['cores'] = data['cores'].map(lambda x: x[0])
         data['payloads'] = data['payloads'].map(lambda x: x[0])
         data['date'] = pd.to_datetime(data['date_utc']).dt.date
-        data = data[data['date'] <= datetime.date(2020, 11, 13)]
+        data = data[data['date'] <= datetime.date(2023, 11, 13)]
 
         # Call data extraction methods
         self.getBoosterVersion(data)
@@ -333,7 +333,7 @@ class Analysis():
         
         # plt.clf()  # Clear the figure for the next plot
         plt.figure()
-        
+
         #Plot 2: Success rate over years
         years = [date.year for date in data_falcon9['Date']]
         df_yearly = pd.DataFrame({'year': years, 'Class': data_falcon9['Class']})
