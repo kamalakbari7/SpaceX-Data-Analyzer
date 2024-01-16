@@ -184,13 +184,28 @@ class Analysis():
             self.Legs.append(core.get('legs', None))
 
 
-
+    def clear_data(self):
+        """Clears the data lists to prepare for new data loading."""
+        self.BoosterVersion = []
+        self.PayloadMass = []
+        self.Orbit = []
+        self.LaunchSite = []
+        self.Outcome = []
+        self.Flights = []
+        self.GridFins = []
+        self.Reused = []
+        self.Legs = []
+        self.Block = []
+        self.ReusedCount = []
+        self.Serial = []
+        self.Longitude = []
+        self.Latitude = []
 
     def load_data(self):
         """A function to fetch the initial dataset
 
         """
-        
+        self.clear_data()
         spacex_url="https://api.spacexdata.com/v4/launches/past"
         response = requests.get(spacex_url)
         if response.status_code != 200:
