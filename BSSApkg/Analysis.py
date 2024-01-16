@@ -326,7 +326,7 @@ class Analysis():
             ax1.bar_label(container, fontsize=plot1_config.get("font_size", 15))
 
         # Save or display the first plot
-        # plt.savefig(os.path.join(save_path_plot1, 'plot1.png')) if save_path_plot1 else plt.show()
+        
         print("Displaying plot 1")
         plt.show()
 
@@ -344,8 +344,8 @@ class Analysis():
         plt.xlabel(plot2_config.get("x_axis_title", "Year"))
         plt.ylabel(plot2_config.get("y_axis_title", "Success Rate"))
         plt.title(plot2_config.get("title", "SpaceX Success Rate Over Years"))
+        
         # Save or display the second plot
-        # plt.savefig(os.path.join(save_path_plot2, 'plot2.png')) if save_path_plot2 else plt.show()
         print("Displaying plot 2")
         plt.show()
         if save_path_plot2:
