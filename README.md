@@ -1,6 +1,3 @@
-# BSSA
-A Python package for data analysis and information visualisation based on the extracted data from SpaceX API.
-
 # SpaceX Data Analyzer
 
 A Python package for data analysis and information visualization based on the extracted data from the SpaceX API.
@@ -22,13 +19,13 @@ SpaceX Data Analyzer is a Python package that facilitates data analysis and info
 ## Installation
 
 ```bash
-pip install spacex-data-analyzer
+pip install git+https://github.com/kamalakbari7/BSSApkg
 ```
 
 ## Getting Started
 
 ```python
-from spacex_data_analyzer import Analysis
+from BSSApkg import Analysis
 
 # Create an instance of the Analysis class
 analyzer = Analysis(analysis_config="path/to/your/analysis_config.yml")
