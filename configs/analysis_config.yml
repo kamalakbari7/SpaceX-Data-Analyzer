@@ -8,7 +8,7 @@ plot1:
   figure_size:
     width: 10
     height: 6
-  save_path: /path/to/save/plot1/
+  save_path: ./plot/
 
 
 
@@ -21,7 +21,7 @@ plot2:
   figure_size:
     width: 10
     height: 6
-  default_save_path: /path/to/save/plots/
+  save_path: ./plot/
 
 
 # SpaceX API endpoint for data retrieval
@@ -36,6 +36,6 @@ data_filtering:
 
 logging:
   log_level: INFO
-  log_file_path: /path/to/logs/analysis.log
+  log_file_path: ./logs/analysis.log
 
 

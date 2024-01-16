@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 import datetime
 import seaborn as sns
+import os
 
 # Setting this option will print all collumns of a dataframe
 pd.set_option('display.max_columns', None)
@@ -42,7 +43,6 @@ class Analysis():
         self.GridFins = []
         self.Reused = []
         self.Legs = []
-        self.LandingPad = []
         self.Block = []
         self.ReusedCount = []
         self.Serial = []
@@ -50,6 +50,26 @@ class Analysis():
         self.Latitude = []
         
 
+    
+    def ensure_save_path(self, plot_key):
+        """
+        Ensure the save path for a plot exists, and if not, create it. The method checks the configuration
+        for a specified plot key ('plot1', 'plot2', etc.) and creates the directory if it doesn't exist.
+
+        Args:
+            plot_key (str): The key for the plot configuration (e.g., 'plot1', 'plot2').
+
+        Returns:
+            str: The save path for the plot.
+        """
+        default_save_path = './plot/'  # Default path if not specified in the config
+        save_path = self.config.get('plot', {}).get(plot_key, {}).get('save_path', default_save_path)
+
+        # Create the directory if it does not exist
+        if not os.path.exists(save_path):
+            os.makedirs(save_path, exist_ok=True)
+        
+        return save_path    
 
 
     def getBoosterVersion(self, data):
@@ -80,6 +100,8 @@ class Analysis():
         Args:
             data ([type]): [description]
         """
+
+        
         for x in data['launchpad']:
             if x:
                 try:
@@ -169,8 +191,8 @@ class Analysis():
 
         """
         
-        static_json_url = 'https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0321EN-SkillsNetwork/datasets/API_call_spacex_api.json'
-        response = requests.get(static_json_url)
+        spacex_url="https://api.spacexdata.com/v4/launches/past"
+        response = requests.get(spacex_url)
         if response.status_code != 200:
             print("Failed to load data from API")
             return
@@ -205,13 +227,16 @@ class Analysis():
             'GridFins': self.GridFins,
             'Reused': self.Reused,
             'Legs': self.Legs,
-            'LandingPad': self.LandingPad,
             'Block': self.Block,
             'ReusedCount': self.ReusedCount,
             'Serial': self.Serial,
             'Longitude': self.Longitude,
             'Latitude': self.Latitude
         }
+        # debugging statements
+        for key, value in self.launch_data.items():
+            print(f"Key: {key}, Length: {len(value)}")
+
         self.launch_data_df = pd.DataFrame.from_dict(self.launch_data)
 
     
@@ -264,64 +289,41 @@ class Analysis():
         Returns:
             plt.Figure: A matplotlib figure object containing the generated plots.
         """
-        # Load plot configuration from analysis_config.yml
-        plot_config = self.config.get("plot", {})
         
-        # Define default plot settings
-        default_settings = {
-            "color": "blue",
-            "title": "Title",
-            "x_axis_title": "X Axis",
-            "y_axis_title": "Y Axis",
-            "font_size": 15,
-            "figure_size": {
-                "width": 10,
-                "height": 6
-            },
-            "default_save_path": "/path/to/save/plots/"
-        }
-        
-        # Apply custom plot settings from analysis_config.yml for plot1
-        plot1_settings = plot_config.get("plot1", {})
-        plot1_settings = {**default_settings, **plot1_settings}
-        
+        # Load plot configurations from analysis_config.yml
+        plot1_config = self.config.get("plot1", {})
+        plot2_config = self.config.get("plot2", {})
+
+        # Ensure save paths exist
+        save_path_plot1 = self.ensure_save_path("plot1")
+        save_path_plot2 = self.ensure_save_path("plot2")
+
         # Plot 1: Success rate by orbit type
         orbit_success_rate = data_falcon9.groupby("Orbit")['Class'].mean().sort_values()
-        ax1 = orbit_success_rate.plot(kind='barh', figsize=(plot1_settings["figure_size"]["width"],
-                                                            plot1_settings["figure_size"]["height"]))
-        plt.ylabel(plot1_settings["y_axis_title"])
-        plt.xlabel(plot1_settings["x_axis_title"])
-        plt.title(plot1_settings["title"])
-        plt.bar_label(ax1.containers[0], fontsize=plot1_settings["font_size"])
-        
-        if "save_path" in plot1_settings:
-            save_path = plot1_settings["save_path"]
-        
-        # Display or save the first plot
-        if save_path:
-            plt.savefig(save_path)
-        else:
-            plt.show()
-        
-        # Apply custom plot settings from analysis_config.yml for plot2
-        plot2_settings = plot_config.get("plot2", {})
-        plot2_settings = {**default_settings, **plot2_settings}
-        
-        # Plot 2: Success rate over years
-        years = [date.split("-")[0] for date in data_falcon9['Date']]
+        ax1 = orbit_success_rate.plot(kind='barh', 
+                                      figsize=(plot1_config.get("figure_size", {}).get("width", 10),
+                                               plot1_config.get("figure_size", {}).get("height", 6)),
+                                      color=plot1_config.get("color", "green"))
+        plt.ylabel(plot1_config.get("y_axis_title", "Orbit Type"))
+        plt.xlabel(plot1_config.get("x_axis_title", "Success Rate"))
+        plt.title(plot1_config.get("title", "SpaceX Success Rate by Orbit Type"))
+        for container in ax1.containers:
+            ax1.bar_label(container, fontsize=plot1_config.get("font_size", 15))
+
+        # Save or display the first plot
+        plt.savefig(os.path.join(save_path_plot1, 'plot1.png')) if save_path_plot1 else plt.show()
+        plt.clf()  # Clear the figure for the next plot
+
+        #Plot 2: Success rate over years
+        years = [date.year for date in data_falcon9['Date']]
         df_yearly = pd.DataFrame({'year': years, 'Class': data_falcon9['Class']})
-        ax2 = sns.lineplot(x=np.unique(years), y=df_yearly.groupby('year')['Class'].mean())
-        plt.xlabel(plot2_settings["x_axis_title"])
-        plt.ylabel(plot2_settings["y_axis_title"])
-        plt.title(plot2_settings["title"])
-        
-        if "save_path" in plot2_settings:
-            save_path = plot2_settings["save_path"]
-        
-        # Display or save the second plot
-        if save_path:
-            plt.savefig(save_path)
-        else:
-            plt.show()
+        ax2 = sns.lineplot(x=np.unique(years), y=df_yearly.groupby('year')['Class'].mean(),
+        color=plot2_config.get("color", "blue"))
+        plt.xlabel(plot2_config.get("x_axis_title", "Year"))
+        plt.ylabel(plot2_config.get("y_axis_title", "Success Rate"))
+        plt.title(plot2_config.get("title", "SpaceX Success Rate Over Years"))
+        # Save or display the second plot
+        plt.savefig(os.path.join(save_path_plot2, 'plot2.png')) if save_path_plot2 else plt.show()
+        plt.clf()
 
         return plt.gcf()
