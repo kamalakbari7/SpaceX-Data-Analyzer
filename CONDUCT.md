@@ -1,6 +1,10 @@
 
 # Contributor Covenant Code of Conduct
 
+## SpaceX Data Analyzer Code of Conduct
+
+The SpaceX Data Analyzer community is dedicated to providing a welcoming and inclusive environment for all contributors, users, and collaborators. As members of this community, we strive to create a positive and respectful space for discussion, collaboration, and the pursuit of knowledge. T
+
 ## Our Pledge
 
 We as members, contributors, and leaders pledge to make participation in our
