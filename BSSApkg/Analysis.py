@@ -304,7 +304,7 @@ class Analysis():
         Returns:
             plt.Figure: A matplotlib figure object containing the generated plots.
         """
-        
+        plt.figure()
         # Load plot configurations from analysis_config.yml
         plot1_config = self.config.get("plot1", {})
         plot2_config = self.config.get("plot2", {})
@@ -336,20 +336,20 @@ class Analysis():
         # plt.clf()  # Clear the figure for the next plot
         plt.figure()
         
-        #Plot 2: Success rate over years
-        years = [date.year for date in data_falcon9['Date']]
-        df_yearly = pd.DataFrame({'year': years, 'Class': data_falcon9['Class']})
-        ax2 = sns.lineplot(x=np.unique(years), y=df_yearly.groupby('year')['Class'].mean(),
-        color=plot2_config.get("color", "blue"))
-        plt.xlabel(plot2_config.get("x_axis_title", "Year"))
-        plt.ylabel(plot2_config.get("y_axis_title", "Success Rate"))
-        plt.title(plot2_config.get("title", "SpaceX Success Rate Over Years"))
-        # Save or display the second plot
-        # plt.savefig(os.path.join(save_path_plot2, 'plot2.png')) if save_path_plot2 else plt.show()
-        print("Displaying plot 2")
-        plt.show()
-        if save_path_plot2:
-            plt.savefig(os.path.join(save_path_plot2, 'plot2.png'))
+        # #Plot 2: Success rate over years
+        # years = [date.year for date in data_falcon9['Date']]
+        # df_yearly = pd.DataFrame({'year': years, 'Class': data_falcon9['Class']})
+        # ax2 = sns.lineplot(x=np.unique(years), y=df_yearly.groupby('year')['Class'].mean(),
+        # color=plot2_config.get("color", "blue"))
+        # plt.xlabel(plot2_config.get("x_axis_title", "Year"))
+        # plt.ylabel(plot2_config.get("y_axis_title", "Success Rate"))
+        # plt.title(plot2_config.get("title", "SpaceX Success Rate Over Years"))
+        # # Save or display the second plot
+        # # plt.savefig(os.path.join(save_path_plot2, 'plot2.png')) if save_path_plot2 else plt.show()
+        # print("Displaying plot 2")
+        # plt.show()
+        # if save_path_plot2:
+        #     plt.savefig(os.path.join(save_path_plot2, 'plot2.png'))
         
         # plt.clf()
 
