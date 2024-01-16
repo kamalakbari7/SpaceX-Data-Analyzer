@@ -326,7 +326,10 @@ class Analysis():
             ax1.bar_label(container, fontsize=plot1_config.get("font_size", 15))
 
         # Save or display the first plot
-        plt.savefig(os.path.join(save_path_plot1, 'plot1.png')) if save_path_plot1 else plt.show()
+        # plt.savefig(os.path.join(save_path_plot1, 'plot1.png')) if save_path_plot1 else plt.show()
+        if save_path_plot1:
+            plt.savefig(os.path.join(save_path_plot1, 'plot1.png'))
+        plt.show()
         plt.clf()  # Clear the figure for the next plot
 
         #Plot 2: Success rate over years
@@ -338,7 +341,10 @@ class Analysis():
         plt.ylabel(plot2_config.get("y_axis_title", "Success Rate"))
         plt.title(plot2_config.get("title", "SpaceX Success Rate Over Years"))
         # Save or display the second plot
-        plt.savefig(os.path.join(save_path_plot2, 'plot2.png')) if save_path_plot2 else plt.show()
+        # plt.savefig(os.path.join(save_path_plot2, 'plot2.png')) if save_path_plot2 else plt.show()
+        if save_path_plot2:
+            plt.savefig(os.path.join(save_path_plot2, 'plot2.png'))
+        plt.show()
         plt.clf()
 
         return plt.gcf()
