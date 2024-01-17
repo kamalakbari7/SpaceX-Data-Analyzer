@@ -51,16 +51,20 @@ class Analysis():
         
 
     
-    def ensure_save_path(self, plot_key):
+    def ensure_save_path(self, plot_key):    
         """
         Ensure the save path for a plot exists, and if not, create it. The method checks the configuration
         for a specified plot key ('plot1', 'plot2', etc.) and creates the directory if it doesn't exist.
 
-        Args:
-            plot_key (str): The key for the plot configuration (e.g., 'plot1', 'plot2').
+        Parameters
+        ----------
+        plot_key : str
+             The key for the plot configuration (e.g., 'plot1', 'plot2').
 
-        Returns:
-            str: The save path for the plot.
+         Returns
+         -------
+         str
+             The save path for the plot.
         """
         default_save_path = './plot/'  # Default path if not specified in the config
         save_path = self.config.get('plot', {}).get(plot_key, {}).get('save_path', default_save_path)
@@ -73,10 +77,14 @@ class Analysis():
 
 
     def getBoosterVersion(self, data):
-        """This function takes the dataset and uses the rocket column to call the API and append the data to the list
+        """
+        This function takes the dataset and uses the rocket column to call the API and append the data to the list
 
-        Args:
-            data ([type]): [description]
+        Parameters
+        ----------
+        data : pandas.DataFrame
+             The dataset containing a 'rocket' column with rocket IDs.
+
         """
         for x in data['rocket']:
             if x:
@@ -97,11 +105,13 @@ class Analysis():
     def getLaunchSite(self, data):
         """This function takes the dataset and uses the launchpad column to call the API and append the data to the list
 
-        Args:
-            data ([type]): [description]
-        """
+        Parameters
+        ----------
+        data : pandas.DataFrame
+            The dataset containing a 'launchpad' column with launchpad IDs.  
 
-        
+        """
+       
         for x in data['launchpad']:
             if x:
                 try:
@@ -125,10 +135,13 @@ class Analysis():
 
 
     def getPayloadData(self, data):
-        """  This function takes the dataset and uses the payloads column to call the API and append the data to the lists
+        """This function takes the dataset and uses the payloads column to call the API and append the data to the lists
 
-        Args:
-            data (_type_): _description_
+        Parameters
+        ----------
+         data : pandas.DataFrame
+            The dataset containing a 'launchpad' column with launchpad IDs.
+
         """
         for load in data['payloads']:
             if load:
@@ -151,8 +164,11 @@ class Analysis():
     def getCoreData(self, data):
         """This function takes the dataset and uses the cores column to call the API and append the data such as 'Block','ReusedCount', 'Serial'  to the list
 
-        Args:
-            data (_type_): _description_
+        Parameters
+        ----------
+        data : pandas.DataFrame
+            The dataset containing a 'cores' column with core information.
+
         """
         for core in data['cores']:
             if core['core'] is not None:
@@ -201,9 +217,9 @@ class Analysis():
         self.Longitude = []
         self.Latitude = []
 
-    def load_data(self):
+    def load_data(self):       
         """A function to fetch the initial dataset
-
+        
         """
         self.clear_data()
         spacex_url="https://api.spacexdata.com/v4/launches/past"
@@ -259,9 +275,12 @@ class Analysis():
     def compute_analysis(self):
         """A function to manage to filter data for Falcon 9, generating new features and fill NaN values
 
-        Returns:
-            [type]: [description]
-        """
+        Returns
+        -------
+        pandas.DataFrame
+             A DataFrame containing filtered Falcon 9 launch data with new features and filled NaN values.    
+        
+       """
         # Filter data for Falcon 9 launches (excluding Falcon 1)
         data_falcon9 = self.launch_data_df[self.launch_data_df['BoosterVersion'] != 'Falcon 1']
 
@@ -295,14 +314,21 @@ class Analysis():
 
 
     def plot_data(self, data_falcon9) -> plt.Figure:
-        """ A function for visualizing the results of analyses. It includes two plots:
+        """
+        A function for visualizing the results of analyses. It includes two plots:
         1. A bar chart for success rate by orbit type.
-        2. A line chart for success rate over years, using the DataFrame processed by compute_analysis.
+        2. A line chart for success rate over years, using the DataFrame processed by compute_analysi
 
-        Args:
-            data_falcon9 (pd.DataFrame): The DataFrame containing processed data for Falcon 9.
-        Returns:
-            plt.Figure: A matplotlib figure object containing the generated plots.
+        Parameters
+        ----------
+        data_falcon9 : pd.DataFrame
+            The DataFrame containing processed data for Falcon 9.
+
+        Returns
+        -------
+        plt.Figure
+            A matplotlib figure object containing the generated plots.     
+   
         """
         plt.figure()
         # Load plot configurations from analysis_config.yml
