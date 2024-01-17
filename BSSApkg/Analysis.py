@@ -17,7 +17,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.max_colwidth', None)
 
 # Set up logging
-logging.basicConfig(level=logging.info)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
 class Analysis():
@@ -43,10 +43,10 @@ class Analysis():
                 config.update(this_config)
             except FileNotFoundError:
                 logger.error(f"File not found: {path}")
-                return None
+                raise
             except yaml.YAMLError as e:
                 logger.error(f"Error parsing YAML file: {path},{e}")
-                return None
+                raise
 
         # try:
         #     with open(file_path, 'r') as file:
@@ -313,9 +313,14 @@ class Analysis():
              A DataFrame containing filtered Falcon 9 launch data with new features and filled NaN values.    
         
        """
+        # Checking if BoosterVersion column there is in the launch_data_df with assert
+        assert 'BoosterVersion' in self.launch_data_df.columns, "BoosterVersion column is missing in the data"
+        
         # Filter data for Falcon 9 launches (excluding Falcon 1)
         data_falcon9 = self.launch_data_df[self.launch_data_df['BoosterVersion'] != 'Falcon 1']
 
+        # Checking if FlightNumber column there is in the launch_data_df with assert
+        assert 'FlightNumber' in self.launch_data_df.columns, "FlightNumber column is missing in the data"
         # Renumber the FlightNumber starting from 1
         data_falcon9 = data_falcon9.reset_index(drop=True)
         data_falcon9['FlightNumber'] = range(1, len(data_falcon9) + 1)
