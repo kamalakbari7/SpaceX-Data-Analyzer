@@ -17,7 +17,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.max_colwidth', None)
 
 # Set up logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.info)
 logger = logging.getLogger()
 
 class Analysis():
@@ -118,7 +118,7 @@ class Analysis():
                 try:
                     response = requests.get(f"https://api.spacexdata.com/v4/rockets/{x}")
                     if response.status_code == 200:
-                        logger.info("Request to GitHub API successful.")
+                        logger.info("Request to SpaceX API was successful.")
                         response_data = response.json()
                         self.BoosterVersion.append(response_data.get('name',None))
                     else:
