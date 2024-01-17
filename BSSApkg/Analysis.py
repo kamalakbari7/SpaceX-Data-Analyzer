@@ -16,11 +16,16 @@ pd.set_option('display.max_columns', None)
 # Setting this option will print all of the data in a feature
 pd.set_option('display.max_colwidth', None)
 
-# Set up logging
+import logging
+
+# Explicitly configure the root logger
 logging.basicConfig(level=logging.INFO)
-# Set the logging level for urllib3 to INFO
+
+# Configure urllib3 logger to WARNING to suppress DEBUG messages
 logging.getLogger('urllib3').setLevel(logging.WARNING)
+
 logger = logging.getLogger()
+
 
 class Analysis():
     def __init__(self, analysis_config:str):
