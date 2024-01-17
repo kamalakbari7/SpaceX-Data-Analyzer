@@ -8,12 +8,17 @@ import numpy as np
 import datetime
 import seaborn as sns
 import os
+import logging
+
 
 # Setting this option will print all collumns of a dataframe
 pd.set_option('display.max_columns', None)
 # Setting this option will print all of the data in a feature
 pd.set_option('display.max_colwidth', None)
 
+# Set up logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger()
 
 class Analysis():
     def __init__(self, analysis_config:str):
@@ -26,11 +31,33 @@ class Analysis():
         config = {}
 
         # load each config file and update the config dictionary
-        for path in paths:
-            with open(path, 'r') as f:
-                this_config = yaml.safe_load(f)
-            config.update(this_config)
+        # for path in paths:
+        #     with open(path, 'r') as f:
+        #         this_config = yaml.safe_load(f)
+        #     config.update(this_config)
 
+        for path in paths:
+            try:
+                with open(path, 'r') as f:
+                    this_config = yaml.safe_load(f)
+                config.update(this_config)
+            except FileNotFoundError:
+                logger.error(f"File not found: {path}")
+                return None
+            except yaml.YAMLError as e:
+                logger.error(f"Error parsing YAML file: {path},{e}")
+                return None
+
+        # try:
+        #     with open(file_path, 'r') as file:
+        #         return yaml.safe_load(file)
+        # except FileNotFoundError:
+        #     logger.error(f"File not found: {file_path}")
+        #     return None
+        # except yaml.YAMLError as e:
+        #     logger.error(f"Error parsing YAML file: {file_path}, {e}")
+        #     return None
+        
         self.config = config
 
         #initialize class attributes 
@@ -83,13 +110,14 @@ class Analysis():
                 try:
                     response = requests.get(f"https://api.spacexdata.com/v4/rockets/{x}")
                     if response.status_code == 200:
+                        logger.info("Request to GitHub API successful.")
                         response_data = response.json()
                         self.BoosterVersion.append(response_data.get('name',None))
                     else:
-                        print(f"Failed to get data for rocket {x}")
+                        logger.warning(f"Request returned a non-200 status code. Failed to get data for rocket {x}")
                         self.BoosterVersion.append(None)  # Or handle it in a way that makes sense for your application
                 except requests.RequestException as e:
-                    print(f"Request failed: {e}")
+                    logger.error(f"Request failed: {e}")
                     self.BoosterVersion.append(None)  # Or handle the error appropriately
 
 
@@ -108,16 +136,17 @@ class Analysis():
                     response = requests.get(f"https://api.spacexdata.com/v4/launchpads/{x}")
                     if response.status_code == 200:
                         response_data = response.json()
+                        logger.info("Request to SpaceX API was successful.")
                         self.Longitude.append(response_data.get('longitude', None))
                         self.Latitude.append(response_data.get('latitude', None))
                         self.LaunchSite.append(response_data.get('name',None))
                     else:
-                        print(f"Failed to get data for launchpad {x}")
+                        logger.warning(f"Request returned a non-200 status code. Failed to get data for launchpad {x}")
                         self.Longitude.append(None)  # Handle missing data
                         self.Latitude.append(None)
                         self.LaunchSite.append(None)
                 except requests.RequestException as e:
-                    print(f"Request failed: {e}")
+                    logger.error(f"Request failed: {e}")
                     self.Longitude.append(None)  # Handle the error appropriately
                     self.Latitude.append(None)
                     self.LaunchSite.append(None)
@@ -135,15 +164,16 @@ class Analysis():
                 try:
                     response = requests.get(f"https://api.spacexdata.com/v4/payloads/{load}")
                     if response.status_code == 200:
+                        logger.info("Request to SpaceX API was successful.")
                         response_data = response.json()
                         self.PayloadMass.append(response_data.get('mass_kg',None))
                         self.Orbit.append(response_data.get('orbit',None))
                     else:
-                        print(f"Failed to get data for payloads {load}")
+                        logger.warning(f"Request returned a non-200 status code. Failed to get data for PayLoad {load}")
                         self.PayloadMass.append(None)
                         self.Orbit.append(None)
                 except requests.RequestException as e:
-                    print(f"Request failed: {e}")
+                    logger.error(f"Request failed: {e}")
                     self.PayloadMass.append(None)
                     self.Orbit.append(None)
                 
@@ -159,16 +189,18 @@ class Analysis():
                 try:
                     response = requests.get(f"https://api.spacexdata.com/v4/cores/{core['core']}")
                     if response.status_code == 200:
+                        logger.info("Request to SpaceX API was successful.")
                         response_data = response.json()
                         self.Block.append(response_data.get('block', None))
                         self.ReusedCount.append(response_data.get('reuse_count', None))
                         self.Serial.append(response_data.get('serial', None))
                     else:
+                        logger.warning(f"Request returned a non-200 status code. Failed to get data for CoreData {core}")
                         self.Block.append(None)
                         self.ReusedCount.append(None)
                         self.Serial.append(None)
                 except requests.RequestException as e:
-                    print(f"Request failed: {e}")
+                    logger.error(f"Request failed: {e}")
                     self.Block.append(None)
                     self.ReusedCount.append(None)
                     self.Serial.append(None)
@@ -209,7 +241,7 @@ class Analysis():
         spacex_url="https://api.spacexdata.com/v4/launches/past"
         response = requests.get(spacex_url)
         if response.status_code != 200:
-            print("Failed to load data from API")
+            logger.warning("Failed to load data from API")
             return
 
         data = pd.json_normalize(response.json())
