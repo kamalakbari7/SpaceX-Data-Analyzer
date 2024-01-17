@@ -18,6 +18,8 @@ pd.set_option('display.max_colwidth', None)
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
+# Set the logging level for urllib3 to INFO
+logging.getLogger('urllib3').setLevel(logging.INFO)
 logger = logging.getLogger()
 
 class Analysis():
