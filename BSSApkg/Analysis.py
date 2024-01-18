@@ -31,52 +31,28 @@ logger = logging.getLogger()
 
 class Analysis():
     def __init__(self, analysis_config:str):
-        # CONFIG_PATHS = ['./configs/system_config.yml', './configs/user_config.yml']
+        CONFIG_PATHS = ['./configs/system_config.yml', './configs/user_config.yml']
 
-        # # add the analysis config to the list of paths to load
-        # paths = CONFIG_PATHS + [analysis_config]
+        # add the analysis config to the list of paths to load
+        paths = CONFIG_PATHS + [analysis_config]
 
-        # # initialize empty dictionary to hold the configuration
-        # config = {}
+        # initialize empty dictionary to hold the configuration
+        config = {}
 
-        # for path in paths:
-        #     try:
-        #         with open(path, 'r') as f:
-        #             this_config = yaml.safe_load(f)
-        #         config.update(this_config)
-        #     except FileNotFoundError:
-        #         logger.error(f"File not found: {path}")
-        #         raise
-        #     except yaml.YAMLError as e:
-        #         logger.error(f"Error parsing YAML file: {path},{e}")
-        #         raise
-
-        # Get the directory of the current script
-        dir_path = Path(__file__).parent.parent
-
-        # System and user configuration paths
-        system_config_path = dir_path / 'configs' / 'system_config.yml'
-        user_config_path = dir_path / 'configs' / 'user_config.yml'
-
-        # Add the analysis-specific configuration path
-        analysis_config_path = dir_path / 'configs' / analysis_config
-
-        # Initialize configuration dictionary
-        self.config = {}
-
-        # Load configurations from each file
-        for path in [system_config_path, user_config_path, analysis_config_path]:
+        for path in paths:
             try:
-                with open(path, 'r') as file:
-                    self.config.update(yaml.safe_load(file))
-            except FileNotFoundError as e:
-                logging.error(f"Configuration file not found: {path}")
-                raise e
+                with open(path, 'r') as f:
+                    this_config = yaml.safe_load(f)
+                config.update(this_config)
+            except FileNotFoundError:
+                logger.error(f"File not found: {path}")
+                raise
             except yaml.YAMLError as e:
-                logging.error(f"Error parsing YAML file: {path}, {e}")
-                raise e
+                logger.error(f"Error parsing YAML file: {path},{e}")
+                raise
+
         
-        # self.config = config
+        self.config = config
 
         #initialize class attributes 
         self.BoosterVersion = []
