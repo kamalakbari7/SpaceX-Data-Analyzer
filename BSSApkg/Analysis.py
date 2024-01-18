@@ -77,7 +77,7 @@ class Analysis():
                 raise
 
         # initialize empty dictionary to hold the configuration
-        config = {}
+        # config = {}
 
 
         self.config = config
