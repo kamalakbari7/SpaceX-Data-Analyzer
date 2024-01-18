@@ -12,8 +12,8 @@ setup(
         'matplotlib',
         'seaborn',
         'requests',
-        'pyyaml'
+        'pyyaml',
+        'scipy'
     ],
-    # Additional metadata about your package
 )
 

@@ -27,12 +27,12 @@ pip install git+https://github.com/kamalakbari7/BSSApkg
 ```python
 import os
 
-os.chdir('path/to/your/BSSApkg')
+os.chdir('path/to/your/project/folder') # configs folder must be inside your project folder
 
-import BSSApkg
 from BSSApkg import Analysis
 analysis = Analysis.Analysis('./configs/analysis_config.yml')
 
+# Fetch the initial dataset
 analysis.load_data()
 
 # Perform computations or data processing
@@ -40,31 +40,17 @@ processed_data = analysis.compute_analysis()
 
 # Visualize the results using the plot_data method
 analysis.plot_data(processed_data)
+
 ```
 
 ## Configuration
 
-The package utilizes configuration files (`system_config.yml`, `user_config.yml`, and `analysis_config.yml`) to customize settings. Ensure the paths to these configuration files are correctly specified.
+The package utilizes configuration files (`system_config.yml`, `user_config.yml`, and `analysis_config.yml`) inside the configs folder to customize settings. Ensure the paths to these configuration files are correctly specified. The **configs** folder must be located inside your project folder. To sse the graphs, see the **plot** folder.
 
 ## Documentation
 
 Detailed documentation is available [here](link-to-your-documentation), providing comprehensive information on installation, usage, configuration, and additional features.
 
-## Example
-
-```python
-from spacex_data_analyzer import Analysis
-
-# Create an instance of the Analysis class
-analyzer = Analysis(analysis_config="path/to/your/analysis_config.yml")
-
-# Load and analyze SpaceX data
-analyzer.load_data()
-processed_data = analyzer.compute_analysis()
-
-# Visualize the results
-analyzer.plot_data(processed_data)
-```
 
 ## License
 

@@ -2,10 +2,7 @@ import pytest
 from BSSApkg.Analysis import Analysis
 import pandas as pd
 import matplotlib
-
-# def test_api_token_name():
-#     with pytest.raises(ValueError):
-#         Analysis.load_data()
+import seaborn as sns
 
 
 
