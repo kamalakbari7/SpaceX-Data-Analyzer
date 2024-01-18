@@ -52,7 +52,6 @@ class Analysis():
                 raise
 
 
-
         self.config = config
 
         #initialize class attributes 
@@ -70,16 +69,8 @@ class Analysis():
         self.Serial = []
         self.Longitude = []
         self.Latitude = []
-        
 
 
-
-
-
-
-
-
-    
     def ensure_save_path(self, plot_key):    
         """
         Ensure the save path for a plot exists, and if not, create it. The method checks the configuration
