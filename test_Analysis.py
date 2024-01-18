@@ -14,7 +14,7 @@ import matplotlib
 # Create an instance of Analysis for testing
 @pytest.fixture
 def analysis_instance():
-    analysis = Analysis('./configs/analysis_config.yml')
+    analysis = Analysis('./analysis_config.yml')
     analysis.load_data()
     return analysis
 
