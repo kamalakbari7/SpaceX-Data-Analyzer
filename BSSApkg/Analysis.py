@@ -53,16 +53,40 @@ class Analysis():
 
 
    
+        # # Determine the directory of this file (Analysis.py)
+        # dir_path = Path(__file__).parent
+
+        # # Construct paths for configuration files relative to this directory
+        # system_config_path = dir_path / 'configs' / 'system_config.yml'
+        # user_config_path = dir_path / 'configs' / 'user_config.yml'
+        # analysis_config_path = dir_path / 'configs' / analysis_config
+        # config = {}
+        # # Add the paths to the list to load
+        # paths = [str(system_config_path), str(user_config_path), str(analysis_config_path)]
+
+        # Debug: Print the __file__ attribute
+        print("__file__:", __file__)
+
         # Determine the directory of this file (Analysis.py)
         dir_path = Path(__file__).parent
+        print("Directory Path:", dir_path)
 
         # Construct paths for configuration files relative to this directory
         system_config_path = dir_path / 'configs' / 'system_config.yml'
         user_config_path = dir_path / 'configs' / 'user_config.yml'
         analysis_config_path = dir_path / 'configs' / analysis_config
+
+        print("System Config Path:", system_config_path)
+        print("User Config Path:", user_config_path)
+        print("Analysis Config Path:", analysis_config_path)
+
+        # Initialize an empty dictionary to hold the configuration
         config = {}
+
         # Add the paths to the list to load
         paths = [str(system_config_path), str(user_config_path), str(analysis_config_path)]
+
+
 
         for path in paths:
             try:
