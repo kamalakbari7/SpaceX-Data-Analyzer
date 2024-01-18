@@ -52,7 +52,7 @@ class Analysis():
         #         raise
 
         # Get the directory of the current script
-        dir_path = Path(__file__).parent
+        dir_path = Path(__file__).parent.parent
 
         # System and user configuration paths
         system_config_path = dir_path / 'configs' / 'system_config.yml'
