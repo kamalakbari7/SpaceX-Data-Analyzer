@@ -25,17 +25,21 @@ pip install git+https://github.com/kamalakbari7/BSSApkg
 ## Getting Started
 
 ```python
+import os
+
+os.chdir('path/to/your/BSSApkg')
+
+import BSSApkg
 from BSSApkg import Analysis
+analysis = Analysis.Analysis('./configs/analysis_config.yml')
 
-# Create an instance of the Analysis class
-analyzer = Analysis(analysis_config="path/to/your/analysis_config.yml")
+analysis.load_data()
 
-# Load and analyze SpaceX data
-analyzer.load_data()
-processed_data = analyzer.compute_analysis()
+# Perform computations or data processing
+processed_data = analysis.compute_analysis()
 
-# Visualize the results
-analyzer.plot_data(processed_data)
+# Visualize the results using the plot_data method
+analysis.plot_data(processed_data)
 ```
 
 ## Configuration
