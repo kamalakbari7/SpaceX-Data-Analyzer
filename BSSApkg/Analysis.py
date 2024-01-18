@@ -9,6 +9,8 @@ import datetime
 import seaborn as sns
 import os
 import logging
+from pathlib import Path
+import os
 
 
 # Setting this option will print all collumns of a dataframe
@@ -29,21 +31,43 @@ logger = logging.getLogger()
 
 class Analysis():
     def __init__(self, analysis_config:str):
-        CONFIG_PATHS = ['./configs/system_config.yml', './configs/user_config.yml']
+        # CONFIG_PATHS = ['./configs/system_config.yml', './configs/user_config.yml']
 
-        # add the analysis config to the list of paths to load
-        paths = CONFIG_PATHS + [analysis_config]
+        # # add the analysis config to the list of paths to load
+        # paths = CONFIG_PATHS + [analysis_config]
 
-        # initialize empty dictionary to hold the configuration
+        # # initialize empty dictionary to hold the configuration
+        # config = {}
+
+
+        # for path in paths:
+        #     try:
+        #         with open(path, 'r') as f:
+        #             this_config = yaml.safe_load(f)
+        #         config.update(this_config)
+        #     except FileNotFoundError:
+        #         logger.error(f"File not found: {path}")
+        #         raise
+        #     except yaml.YAMLError as e:
+        #         logger.error(f"Error parsing YAML file: {path},{e}")
+        #         raise
+
+        
+
+   
+        # Determine the directory where Analysis.py is located
+        package_directory = Path(__file__).parent
+
+        # Build paths to the configuration files
+        system_config_path = package_directory / 'configs' / 'system_config.yml'
+        user_config_path = package_directory / 'configs' / 'user_config.yml'
+        analysis_config_path = package_directory / 'configs' / analysis_config
+
+        # Initialize configuration dictionary
         config = {}
 
-        # load each config file and update the config dictionary
-        # for path in paths:
-        #     with open(path, 'r') as f:
-        #         this_config = yaml.safe_load(f)
-        #     config.update(this_config)
-
-        for path in paths:
+        # Load configuration files
+        for path in [system_config_path, user_config_path, analysis_config_path]:
             try:
                 with open(path, 'r') as f:
                     this_config = yaml.safe_load(f)
@@ -55,16 +79,7 @@ class Analysis():
                 logger.error(f"Error parsing YAML file: {path},{e}")
                 raise
 
-        # try:
-        #     with open(file_path, 'r') as file:
-        #         return yaml.safe_load(file)
-        # except FileNotFoundError:
-        #     logger.error(f"File not found: {file_path}")
-        #     return None
-        # except yaml.YAMLError as e:
-        #     logger.error(f"Error parsing YAML file: {file_path}, {e}")
-        #     return None
-        
+
         self.config = config
 
         #initialize class attributes 
@@ -83,6 +98,13 @@ class Analysis():
         self.Longitude = []
         self.Latitude = []
         
+
+
+
+
+
+
+
 
     
     def ensure_save_path(self, plot_key):    
