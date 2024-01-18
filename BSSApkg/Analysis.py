@@ -60,7 +60,7 @@ class Analysis():
         system_config_path = dir_path / 'configs' / 'system_config.yml'
         user_config_path = dir_path / 'configs' / 'user_config.yml'
         analysis_config_path = dir_path / 'configs' / analysis_config
-
+        config = {}
         # Add the paths to the list to load
         paths = [str(system_config_path), str(user_config_path), str(analysis_config_path)]
 
