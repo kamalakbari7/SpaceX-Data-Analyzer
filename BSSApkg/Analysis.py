@@ -39,15 +39,30 @@ class Analysis():
         # # initialize empty dictionary to hold the configuration
         # config = {}
 
-        # Get the directory where the script is located
-        current_dir = os.path.dirname(os.path.abspath(__file__))
+        # for path in paths:
+        #     try:
+        #         with open(path, 'r') as f:
+        #             this_config = yaml.safe_load(f)
+        #         config.update(this_config)
+        #     except FileNotFoundError:
+        #         logger.error(f"File not found: {path}")
+        #         raise
+        #     except yaml.YAMLError as e:
+        #         logger.error(f"Error parsing YAML file: {path},{e}")
+        #         raise
 
-        # Define the configuration paths relative to the current directory
-        CONFIG_PATHS = [os.path.join(current_dir, 'configs/system_config.yml'), 
-                        os.path.join(current_dir, 'configs/user_config.yml')]
 
-        # Add the analysis config to the list of paths to load
-        paths = CONFIG_PATHS + [os.path.join(current_dir, analysis_config)]
+   
+        # Determine the directory of this file (Analysis.py)
+        dir_path = Path(__file__).parent
+
+        # Construct paths for configuration files relative to this directory
+        system_config_path = dir_path / 'configs' / 'system_config.yml'
+        user_config_path = dir_path / 'configs' / 'user_config.yml'
+        analysis_config_path = dir_path / 'configs' / analysis_config
+
+        # Add the paths to the list to load
+        paths = [str(system_config_path), str(user_config_path), str(analysis_config_path)]
 
         for path in paths:
             try:
@@ -61,32 +76,8 @@ class Analysis():
                 logger.error(f"Error parsing YAML file: {path},{e}")
                 raise
 
-        
-
-   
-        # # Determine the directory where Analysis.py is located
-        # package_directory = Path(__file__).parent
-
-        # # Build paths to the configuration files
-        # system_config_path = package_directory / 'configs' / 'system_config.yml'
-        # user_config_path = package_directory / 'configs' / 'user_config.yml'
-        # analysis_config_path = package_directory / 'configs' / analysis_config
-
-        # Initialize configuration dictionary
+        # initialize empty dictionary to hold the configuration
         config = {}
-
-        # # Load configuration files
-        # for path in [system_config_path, user_config_path, analysis_config_path]:
-        #     try:
-        #         with open(path, 'r') as f:
-        #             this_config = yaml.safe_load(f)
-        #         config.update(this_config)
-        #     except FileNotFoundError:
-        #         logger.error(f"File not found: {path}")
-        #         raise
-        #     except yaml.YAMLError as e:
-        #         logger.error(f"Error parsing YAML file: {path},{e}")
-        #         raise
 
 
         self.config = config
